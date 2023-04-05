@@ -12,4 +12,7 @@
         </menu>
 
     </item>
+
+    <item android:id="@+id/Mn4" android:title="Cerrar sesión"></item>
+
 </menu>

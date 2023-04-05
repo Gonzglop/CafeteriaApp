@@ -24,9 +24,7 @@
         android:hint="Usuario"
         android:textColorHint="#B8B8B8"
         android:textColor="@color/white"
-        android:layout_margin="20dp"
-
-        android:alpha="0"/>
+        android:layout_margin="20dp"/>
 
     <EditText
         android:id="@+id/lbl2"
@@ -38,8 +36,7 @@
         android:layout_margin="20dp"
         android:textColorHint="#B8B8B8"
         android:textColor="@color/white"
-        android:hint="Contraseña"
-        android:alpha="0"/>
+        android:hint="Contraseña" />
 
     <Button
         android:id="@+id/btn1"
@@ -49,6 +46,6 @@
         android:layout_gravity="center"
         android:layout_margin="30dp"
         android:text="ACCEDER"
-        android:alpha="0"/>
+        />
 </LinearLayout>
 

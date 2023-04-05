@@ -8,7 +8,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -32,8 +34,8 @@ public class InicioActivity extends AppCompatActivity {
         final TextView txtSaludo = (TextView) findViewById(R.id.text1);
 
         Bundle extras = getIntent().getExtras();
-        String usuario = extras.getString("usuario");
-        txtSaludo.setText("Bienvenid@ " + usuario);
+        //String usuario = extras.getString("usuario");
+        //txtSaludo.setText("Bienvenid@ " + usuario);
 
         final Button boton1 = (Button) findViewById(R.id.bton5);
         final Button boton2 = (Button) findViewById(R.id.bton2);
@@ -142,6 +144,18 @@ public class InicioActivity extends AppCompatActivity {
                 intent2.putExtra(Intent.EXTRA_TEXT,"No consigo acceder a mi monedero");
                 intent2.putExtra(Intent.EXTRA_EMAIL, new String[]{"soporte@g.micafeteria.es"});
                 startActivity(intent2);
+
+                return true;
+
+            case R.id.Mn4:
+
+                SharedPreferences preferences = getSharedPreferences("preferenciasLogin", Context.MODE_PRIVATE);
+                preferences.edit().clear().commit();
+                Intent intent3 = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent3);
+                finish();
+
+
 
                 return true;
 
