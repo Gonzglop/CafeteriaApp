@@ -20,14 +20,17 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
     EditText edtUsuario, edtPassword;
-    Button btnLogin;
-    String usuario, password;
+    Button btnLogin, btnRegistrar;
+    String usuario, password,idCliente;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,9 +40,9 @@ public class MainActivity extends AppCompatActivity {
         edtUsuario = (EditText) findViewById(R.id.lbl1);
         edtPassword = (EditText) findViewById(R.id.lbl2);
         btnLogin = (Button) findViewById(R.id.btn1);
+        btnRegistrar = (Button) findViewById(R.id.btn_registrar);
 
         recuperarPreferencias();
-
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,17 +57,36 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+        btnRegistrar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent(getApplicationContext(), RegistroClienteActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
     }
     private void validarUsuario(String URL){
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 if (!response.isEmpty()) {
-                    guardarPreferencias();
-                    Intent intent = new Intent(getApplicationContext(), InicioActivity.class);
-                    intent.putExtra("usuario", edtUsuario.getText().toString());
-                    startActivity(intent);
-                    finish();
+                    try {
+                        JSONObject jsonObject = new JSONObject(response);
+                        idCliente = jsonObject.getString("id_cliente");
+                        Toast.makeText(MainActivity.this, "ID: " + idCliente, Toast.LENGTH_LONG).show();
+
+                        guardarPreferencias(); // Guardar el id_cliente en las preferencias
+
+                        Intent intent = new Intent(getApplicationContext(), InicioActivity.class);
+                        //intent.putExtra("idCliente", idCliente);
+                        startActivity(intent);
+                        finish();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 } else {
                     Toast.makeText(MainActivity.this, "Usuario o contraseña incorrecta", Toast.LENGTH_SHORT).show();
                 }
@@ -93,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString("usuario", usuario);
         editor.putString("password", password);
+        editor.putString("idCliente", idCliente); // Guardar el id_cliente en las preferencia
         editor.putBoolean("sesion", true);
         editor.commit();
     }

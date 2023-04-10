@@ -1,153 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#323232"
+    android:orientation="vertical"
+    android:background="#323232">
 
-    android:id="@+id/rl1">
-
-
-    <RelativeLayout
-        android:id="@+id/rl2"
+    <TextView
+        android:id="@+id/txtSaludo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true">
-
-        <TextView
-            android:id="@+id/text1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="50sp"
-            android:text="Bienvenido"
-            android:textAlignment="center"
-            android:textColor="#489465"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+        android:text="Hola "
+        android:textColor="#489465"
+        android:textSize="40sp"
+        android:textStyle="bold"
+        android:layout_marginStart="50sp"
+        android:layout_marginTop="30sp"
+        android:layout_marginEnd="50sp"
+        android:layout_marginBottom="30sp"
+        android:gravity="center" />
 
 
-    </RelativeLayout>
-    <RelativeLayout
-        android:id="@+id/rl3"
+    <ImageView
+        android:id="@+id/imagen_cliente_inicio"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/usuario"
+        />
+
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@id/rl7">
+        android:text="Seleccione un perfil: "
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_marginHorizontal="50sp"
+        android:layout_marginVertical="20sp"/>
 
-        <TextView
-            android:id="@+id/text2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="#FE4517"
-            android:text="¿Qué te apetece hoy?"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:textAlignment="center"
-            android:layout_marginBottom="20sp"
-            />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_perfiles"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"/>
 
-    </RelativeLayout>
-    <RelativeLayout
-        android:id="@+id/rl4"
+    <Button
+        android:id="@+id/btn_crear_perfil"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="+"
+        android:textColor="@color/black"
+        android:backgroundTint="#489465"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_gravity="center"
+        android:textAlignment="center"
+        />
+
+    <TextView
+        android:id="@+id/txtSaldo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/rl3"/>
-    <RelativeLayout
-        android:id="@+id/rl5"
+        android:textColor="#FE4517"
+        android:text="Su saldo actual es de :"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        android:layout_marginTop="20dp"
+        />
+
+    <Button
+        android:id="@+id/btn_recargar_monedero"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/rl2">
+        android:text="Recargar monedero"
+        android:textColor="@color/black"
+        android:backgroundTint="#FE4517"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        android:layout_marginHorizontal="10sp"
+        android:layout_marginTop="20sp"
+        android:layout_marginBottom="20sp"/>
 
-        <Button
-            android:id="@+id/bton2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="MI CUENTA"
-            android:textColor="@color/black"
-            android:layout_marginHorizontal="50sp"
-            android:backgroundTint="#489465"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:textAlignment="center"
-            android:layout_marginBottom="40sp"
-            />
-
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/rl6"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/rl5">
-
-        <Button
-            android:id="@+id/bton3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="MI monedero"
-            android:textColor="@color/black"
-            android:layout_marginHorizontal="50sp"
-            android:backgroundTint="#489465"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:textAlignment="center"
-            android:layout_marginBottom="40sp"
-            />
-
-        <TextView
-            android:id="@+id/text3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="50sp"
-            android:layout_marginTop="45sp"
-            android:text="Su saldo actual es de : 12,50€"
-            android:textAlignment="center"
-            android:textColor="#B8B8B8"
-            android:textSize="15sp" />
-
-
-
-    </RelativeLayout>
-    <RelativeLayout
-        android:id="@+id/rl8"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/rl6">
-
-        <Button
-            android:id="@+id/bton5"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="ayuda"
-            android:textColor="@color/black"
-            android:layout_marginHorizontal="50sp"
-            android:backgroundTint="#489465"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:textAlignment="center"
-            android:layout_marginBottom="40sp"
-            />
-
-    </RelativeLayout>
-    <RelativeLayout
-        android:id="@+id/rl7"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:gravity="center">
-
-        <Button
-            android:id="@+id/bton4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Hacer pedido"
-            android:textColor="@color/black"
-            android:layout_marginHorizontal="10sp"
-            android:backgroundTint="#FE4517"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:textAlignment="center"
-            android:layout_marginBottom="40sp"
-            />
-
-    </RelativeLayout>
-
-</RelativeLayout>
+</LinearLayout>
