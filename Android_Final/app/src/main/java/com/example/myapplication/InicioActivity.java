@@ -15,6 +15,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,6 +26,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -36,6 +38,7 @@ public class InicioActivity extends AppCompatActivity {
 
     TextView txtSaludo , txtSaldo;
     Button btnCrearPerfil, btnRecargarMonedero;
+    ImageView imagenCliente;
 
     String idCliente;
     RequestQueue requestQueue;
@@ -54,6 +57,7 @@ public class InicioActivity extends AppCompatActivity {
 
         txtSaludo = (TextView) findViewById(R.id.txtSaludo);
         txtSaldo = (TextView) findViewById(R.id.txtSaldo);
+        imagenCliente = (ImageView) findViewById(R.id.imagen_cliente_inicio);
         btnCrearPerfil = (Button) findViewById(R.id.btn_crear_perfil);
         btnRecargarMonedero = (Button) findViewById(R.id.btn_recargar_monedero);
         recyclerView = findViewById(R.id.recycler_perfiles);
@@ -175,6 +179,13 @@ public class InicioActivity extends AppCompatActivity {
 
                             txtSaludo.setText("¡Hola " + nombre + "!");
                             txtSaldo.setText("Su saldo actual es de : " + saldo + "€");
+                            try {
+                                Picasso.get().load(imagen)
+                                        .error(R.drawable.usuario)
+                                        .into(imagenCliente);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
 
                         } catch (JSONException e) {
                             e.printStackTrace();

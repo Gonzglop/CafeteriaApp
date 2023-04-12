@@ -119,13 +119,19 @@
         android:textColor="@color/white"
         android:text="Imagen:" />
 
-    <EditText
-        android:id="@+id/imagen_cliente"
+    <Button
+        android:id="@+id/btnElegirImagen"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/white"
-        android:inputType="textLongMessage"
-        android:maxLength="300"
+        android:text="Elegir imagen"
+        />
+
+    <ImageView
+        android:id="@+id/imagen_cliente"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+
         />
 
 
@@ -133,7 +139,7 @@
         android:id="@+id/btn_insertar_cliente"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="0dp"
         android:text="Crear usuario" />
 
 </LinearLayout>
