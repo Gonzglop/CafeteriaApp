@@ -72,8 +72,8 @@ public class RegistroClienteActivity extends AppCompatActivity {
                 String email = edtEmail.getText().toString().trim();
                 String password = edtPassword.getText().toString().trim();
                 String imagen = getStringImagen(bitmap);
-                crearUsuario(dni, nombre, apellidos, direccion, telefono, email, password, imagen);
 
+                crearUsuario(dni, nombre, apellidos, direccion, telefono, email, password, imagen);
             }
         });
 

@@ -5,10 +5,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.media.Image;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -19,19 +27,27 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 public class ModificacionClienteActivity extends AppCompatActivity {
 
-    EditText edtDni, edtNombre, edtApellidos, edtDireccion, edtTelefono, edtEmail, edtPassword, edtImagen;
-    Button btnModificar, btnEliminar;
+    EditText edtDni, edtNombre, edtApellidos, edtDireccion, edtTelefono, edtEmail, edtPassword;
+    Button btnModificar, btnEliminar,btnElegirImagen;
+    ImageView imagenCliente;
+    Drawable drawable;
 
+    final int PICK_IMAGE_REQUEST = 1;
+    Bitmap bitmap;
     String idCliente;
+
     RequestQueue requestQueue;
 
     private static final String urlModificarCliente = "https://micafeteriaapp.000webhostapp.com/android_mysql/modificar_cliente.php";
@@ -53,19 +69,26 @@ public class ModificacionClienteActivity extends AppCompatActivity {
         edtTelefono = (EditText)findViewById(R.id.telefono_cliente);
         edtEmail = (EditText)findViewById(R.id.email_cliente);
         edtPassword = (EditText)findViewById(R.id.password_cliente);
-        edtImagen = (EditText)findViewById(R.id.imagen_cliente);
+        imagenCliente = (ImageView) findViewById(R.id.imagen_cliente);
 
         btnModificar = (Button)findViewById(R.id.btn_modificar_cliente);
         btnEliminar = (Button)findViewById(R.id.btn_eliminar_cliente);
+        btnElegirImagen = (Button)findViewById(R.id.btnElegirImagen);
 
         SharedPreferences preferences = getSharedPreferences("preferenciasLogin", Context.MODE_PRIVATE);
         idCliente = preferences.getString("idCliente", "");
 
         ConsultarUsuario();
 
+
+
         btnModificar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                drawable = imagenCliente.getDrawable();
+                bitmap = ((BitmapDrawable) drawable).getBitmap();
+                
                 String dni = edtDni.getText().toString().trim();
                 String nombre = edtNombre.getText().toString().trim();
                 String apellidos = edtApellidos.getText().toString().trim();
@@ -73,7 +96,7 @@ public class ModificacionClienteActivity extends AppCompatActivity {
                 String telefono = edtTelefono.getText().toString().trim();
                 String email = edtEmail.getText().toString().trim();
                 String password = edtPassword.getText().toString().trim();
-                String imagen = edtImagen.getText().toString().trim();
+                String imagen = getStringImagen(bitmap);
 
                 ModificarUsuario(dni, nombre, apellidos, direccion, telefono, email, password, imagen);
 
@@ -86,6 +109,14 @@ public class ModificacionClienteActivity extends AppCompatActivity {
                 EliminarUsuario();
                 SharedPreferences preferences = getSharedPreferences("preferenciasLogin", Context.MODE_PRIVATE);
                 preferences.edit().clear().commit();
+            }
+        });
+
+        btnElegirImagen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                showFileChooser();
             }
         });
     }
@@ -193,7 +224,13 @@ public class ModificacionClienteActivity extends AppCompatActivity {
                             edtTelefono.setText(telefono);
                             edtEmail.setText(email);
                             edtPassword.setText(password);
-                            edtImagen.setText(imagen);
+                            try {
+                                Picasso.get().load(imagen)
+                                        .error(R.drawable.usuario)
+                                        .into(imagenCliente);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -208,6 +245,34 @@ public class ModificacionClienteActivity extends AppCompatActivity {
                 }
         );
         requestQueue.add(jsonObjectRequest);
+    }
+
+    private String getStringImagen(Bitmap bitmap) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] imageBytes = baos.toByteArray();
+        return Base64.encodeToString(imageBytes, Base64.DEFAULT);
+    }
+    private void showFileChooser() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Seleccionar Imagen"), PICK_IMAGE_REQUEST);
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            Uri uri = data.getData();
+
+            try {
+                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+                imagenCliente.setImageBitmap(bitmap);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 }

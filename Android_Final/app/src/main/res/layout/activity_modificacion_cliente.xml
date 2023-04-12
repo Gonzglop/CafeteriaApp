@@ -119,26 +119,41 @@
         android:textColor="@color/white"
         android:text="Imagen:" />
 
-    <EditText
-        android:id="@+id/imagen_cliente"
+    <Button
+        android:id="@+id/btnElegirImagen"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/white"
-        android:inputType="textLongMessage"
-        android:maxLength="300"
+        android:text="Elegir imagen"
         />
 
+    <ImageView
+        android:id="@+id/imagen_cliente"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
 
-    <Button
-        android:id="@+id/btn_modificar_cliente"
+        />
+
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:text="Modificar usuario" />
-    <Button
-        android:id="@+id/btn_eliminar_cliente"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Eliminar usuario" />
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/btn_eliminar_cliente"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Eliminar usuario" />
+
+        <Button
+            android:id="@+id/btn_modificar_cliente"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
+            android:text="Modificar usuario" />
+
+    </LinearLayout>
+
+
 
 </LinearLayout>
