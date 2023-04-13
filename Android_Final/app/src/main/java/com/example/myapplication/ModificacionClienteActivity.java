@@ -88,7 +88,7 @@ public class ModificacionClienteActivity extends AppCompatActivity {
 
                 drawable = imagenCliente.getDrawable();
                 bitmap = ((BitmapDrawable) drawable).getBitmap();
-                
+
                 String dni = edtDni.getText().toString().trim();
                 String nombre = edtNombre.getText().toString().trim();
                 String apellidos = edtApellidos.getText().toString().trim();

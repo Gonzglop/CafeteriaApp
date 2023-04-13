@@ -60,7 +60,6 @@ public class EncuestaActivity extends AppCompatActivity {
         datos.add(new Opcion("Pitufo mixto","1,40€", R.drawable.logo80px));
         datos.add(new Opcion("Pitufo jamón serrano","1,50€", R.drawable.logo80px));
         datos.add(new Opcion("Pitufo catalana","1,80€", R.drawable.logo80px));
-
         datos.add(new Opcion("Coca-Cola","1,00€", R.drawable.logo80px));
         datos.add(new Opcion("Fanta Naranja","1,00€", R.drawable.logo80px));
         datos.add(new Opcion("Aquarius","1,20€", R.drawable.logo80px));
