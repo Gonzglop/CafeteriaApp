@@ -5,4 +5,5 @@
     android:background="#434343"
     android:textSize="18sp"
     android:textColor="@color/white"
-    android:padding="10dp" />
+    android:padding="10dp"
+    android:text="Cafetería 1"/>

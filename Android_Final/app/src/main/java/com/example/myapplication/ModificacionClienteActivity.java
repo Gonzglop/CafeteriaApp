@@ -86,8 +86,8 @@ public class ModificacionClienteActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                drawable = imagenCliente.getDrawable();
-                bitmap = ((BitmapDrawable) drawable).getBitmap();
+                //drawable = imagenCliente.getDrawable();
+                //bitmap = ((BitmapDrawable) drawable).getBitmap();
 
                 String dni = edtDni.getText().toString().trim();
                 String nombre = edtNombre.getText().toString().trim();

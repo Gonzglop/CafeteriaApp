@@ -75,20 +75,20 @@ public class PerfilAdapter extends RecyclerView.Adapter<PerfilAdapter.PerfilView
                 intent.putExtra("nombreApellidos", perfil.getNombrePerfil() + " " + perfil.getApellidosPerfil());
 
                 contexto.startActivity(intent);
-                ((Activity) contexto).finish();
+                //((Activity) contexto).finish();
             }
         });
 
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(contexto, PedidoUnicoActivity.class);
+                Intent intent = new Intent(contexto, EncuestaActivity.class);
                 intent.putExtra("idPerfil", perfil.getIdPerfil());
                 intent.putExtra("idCafeteria", perfil.getIdCafeteria());
                 intent.putExtra("nombrePerfil", perfil.getNombrePerfil());
 
                 contexto.startActivity(intent);
-                ((Activity) contexto).finish();
+                //((Activity) contexto).finish();
             }
         });
 
@@ -108,11 +108,13 @@ public class PerfilAdapter extends RecyclerView.Adapter<PerfilAdapter.PerfilView
                                 Intent intent = new Intent(contexto, ModificacionPerfilActivity.class);
                                 intent.putExtra("idPerfil", perfil.getIdPerfil());
                                 intent.putExtra("idCafeteria", perfil.getIdCafeteria());
+                                intent.putExtra("dni", perfil.getNieDniPerfil());
                                 intent.putExtra("nombrePerfil", perfil.getNombrePerfil());
+                                intent.putExtra("apellidos", perfil.getApellidosPerfil());
+                                intent.putExtra("imagenPerfil", perfil.getImagenPerfil());
 
                                 contexto.startActivity(intent);
-                                ((Activity)contexto).finish();
-
+                                //((Activity)contexto).finish();
                                 return true;
                             case R.id.MnEliminar:
                                 eliminarPerfil(perfil.getIdPerfil());

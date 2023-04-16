@@ -63,7 +63,6 @@ public class InicioActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recycler_perfiles);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-
         requestQueue = Volley.newRequestQueue(this);
 
         SharedPreferences preferences = getSharedPreferences("preferenciasLogin", Context.MODE_PRIVATE);
@@ -77,18 +76,22 @@ public class InicioActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), RegistroPerfilActivity.class);
                 startActivity(intent);
-                finish();
+                //finish();
             }
         });
         btnRecargarMonedero.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), MonederoActivity.class);
+                startActivity(intent);
+                //finish();
             }
         });
+    }
 
-        // Asocio el menú contextual a la etiqueta
-        //final TextView etiqueta = findViewById(R.id.txt_perfil);
-        //registerForContextMenu(etiqueta);
+    @Override
+    protected void onStart() {
+        super.onStart();
 
     }
 
@@ -118,6 +121,9 @@ public class InicioActivity extends AppCompatActivity {
 
             case R.id.Mn2:
 
+                Intent intent = new Intent(getApplicationContext(), MonederoActivity.class);
+                startActivity(intent);
+                //finish();
                 return true;
 
             case R.id.Mn3:
@@ -126,8 +132,8 @@ public class InicioActivity extends AppCompatActivity {
 
             case R.id.MnOp1:
 
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("geo:36.692540, -4.440447?z=18"));
-                startActivity(intent);
+                Intent intent1 = new Intent(Intent.ACTION_VIEW, Uri.parse("geo:36.692540, -4.440447?z=18"));
+                startActivity(intent1);
                 return true;
 
             case R.id.MnOp2:
