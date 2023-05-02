@@ -36,7 +36,7 @@ import java.util.ArrayList;
 
 public class InicioActivity extends AppCompatActivity {
 
-    TextView txtSaludo , txtSaldo;
+    TextView txtSaludo , txtSaldo, txtISaldo;
     Button btnCrearPerfil, btnRecargarMonedero;
     ImageView imagenCliente;
 
@@ -50,6 +50,7 @@ public class InicioActivity extends AppCompatActivity {
 
 
     ActivityResultLauncher resultLauncher;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +58,8 @@ public class InicioActivity extends AppCompatActivity {
 
         txtSaludo = (TextView) findViewById(R.id.txtSaludo);
         txtSaldo = (TextView) findViewById(R.id.txtSaldo);
+        txtISaldo = (TextView) findViewById(R.id.txtISaldo);
+
         imagenCliente = (ImageView) findViewById(R.id.imagen_cliente_inicio);
         btnCrearPerfil = (Button) findViewById(R.id.btn_crear_perfil);
         btnRecargarMonedero = (Button) findViewById(R.id.btn_recargar_monedero);
@@ -84,16 +87,18 @@ public class InicioActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), MonederoActivity.class);
                 startActivity(intent);
-                //finish();
+                finish();
             }
         });
     }
 
+    /*
     @Override
     protected void onStart() {
         super.onStart();
-
+        consultarUsuario();
     }
+     */
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
@@ -120,8 +125,10 @@ public class InicioActivity extends AppCompatActivity {
                 return true;
 
             case R.id.Mn2:
-
                 Intent intent = new Intent(getApplicationContext(), MonederoActivity.class);
+                intent.putExtra("iSaldo","hola");
+                System.out.println(txtISaldo.getText());
+                intent.putExtra("idCliente",idCliente);
                 startActivity(intent);
                 //finish();
                 return true;
@@ -185,6 +192,10 @@ public class InicioActivity extends AppCompatActivity {
 
                             txtSaludo.setText("¡Hola " + nombre + "!");
                             txtSaldo.setText("Su saldo actual es de : " + saldo + "€");
+
+                            txtISaldo.setText(saldo);
+
+
                             try {
                                 Picasso.get().load(imagen)
                                         .error(R.drawable.usuario)

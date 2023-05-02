@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/Mn1" android:title="Mi cuenta"></item>
+
+    <item android:id="@+id/Mn2" android:title="Mi monedero"></item>
+
+    <item android:id="@+id/Mn3" android:title="Ayuda">
+        <menu>
+            <item android:id="@+id/MnOp1" android:title="Ubicación de la cafetería"></item>
+            <item android:id="@+id/MnOp2" android:title="Enviar e-mail a Soporte Técnico"></item>
+        </menu>
+
+    </item>
+
+    <item android:id="@+id/Mn4" android:title="Cerrar sesión"></item>
+
+</menu>

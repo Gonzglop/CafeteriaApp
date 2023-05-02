@@ -82,12 +82,12 @@ public class PerfilAdapter extends RecyclerView.Adapter<PerfilAdapter.PerfilView
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(contexto, EncuestaActivity.class);
-                intent.putExtra("idPerfil", perfil.getIdPerfil());
-                intent.putExtra("idCafeteria", perfil.getIdCafeteria());
-                intent.putExtra("nombrePerfil", perfil.getNombrePerfil());
+                Intent intentDatosPerfil = new Intent(contexto, PedidoUnicoActivity.class);
+                intentDatosPerfil.putExtra("idPerfil", perfil.getIdPerfil());
+                intentDatosPerfil.putExtra("idCafeteria", perfil.getIdCafeteria());
+                intentDatosPerfil.putExtra("nombrePerfil", perfil.getNombrePerfil());
 
-                contexto.startActivity(intent);
+                contexto.startActivity(intentDatosPerfil);
                 //((Activity) contexto).finish();
             }
         });
