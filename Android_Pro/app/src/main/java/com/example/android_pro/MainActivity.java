@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
 
     EditText edtUsuario, edtPassword;
     Button btnLogin, btnRegistrar;
-    String usuario, password,idCliente;
+    String usuario, password,idCafeteria;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
                 password = edtPassword.getText().toString();
 
                 if (!usuario.isEmpty() && !password.isEmpty()) {
-                    validarUsuario("https://micafeteriaapp.000webhostapp.com/android_mysql/validar_cliente.php");
+                    validarUsuario("https://micafeteriaapp.000webhostapp.com/android_mysql/validar_cafeteria.php");
                 } else {
                     Toast.makeText(MainActivity.this, "Introduce el usuario y la contraseña", Toast.LENGTH_SHORT).show();
                 }
@@ -74,13 +74,12 @@ public class MainActivity extends AppCompatActivity {
                 if (!response.isEmpty()) {
                     try {
                         JSONObject jsonObject = new JSONObject(response);
-                        idCliente = jsonObject.getString("id_cliente");
-                        Toast.makeText(MainActivity.this, "ID: " + idCliente, Toast.LENGTH_LONG).show();
+                        idCafeteria = jsonObject.getString("id_cafeteria");
+                        Toast.makeText(MainActivity.this, "ID: " + idCafeteria, Toast.LENGTH_LONG).show();
 
                         guardarPreferencias(); // Guardar el id_cliente en las preferencias
 
                         Intent intent = new Intent(getApplicationContext(), InicioActivity.class);
-                        //intent.putExtra("idCliente", idCliente);
                         startActivity(intent);
                         finish();
                     } catch (JSONException e) {
@@ -99,8 +98,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             protected Map<String,String> getParams() throws AuthFailureError{
                 Map<String,String> parametros = new HashMap<>();
-                parametros.put("email_cliente", usuario);
-                parametros.put("password_cliente", password);
+                parametros.put("email_cafeteria", usuario);
+                parametros.put("password_cafeteria", password);
                 return parametros;
             }
         };
@@ -114,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString("usuario", usuario);
         editor.putString("password", password);
-        editor.putString("idCliente", idCliente); // Guardar el id_cliente en las preferencia
+        editor.putString("idCafeteria", idCafeteria); // Guardar el id_cliente en las preferencia
         editor.putBoolean("sesion", true);
         editor.commit();
     }

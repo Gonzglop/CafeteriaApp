@@ -23,6 +23,16 @@
         android:fontFamily="monospace"
         android:textStyle="bold"
         android:text="MiCafetería"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="36dp"
+        android:textColor="#FFFE4517"
+        android:fontFamily="monospace"
+        android:textStyle="bold"
+        android:text="PRO"/>
     <ProgressBar
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyle"

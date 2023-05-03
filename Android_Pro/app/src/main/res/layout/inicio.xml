@@ -84,10 +84,10 @@
         />
 
     <Button
-        android:id="@+id/btn_recargar_monedero"
+        android:id="@+id/btn_lector_qr"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Recargar monedero"
+        android:text="Lector QR"
         android:textColor="@color/black"
         android:backgroundTint="#FE4517"
         android:textSize="20sp"

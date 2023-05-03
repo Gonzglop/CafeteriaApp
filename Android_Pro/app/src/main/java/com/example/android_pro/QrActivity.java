@@ -1,5 +1,6 @@
 package com.example.android_pro;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -12,35 +13,25 @@ import android.widget.TextView;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
 public class QrActivity extends AppCompatActivity {
+
+    TextView IdQR;
+    TextView nombreQR;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qr);
 
-        ImageView imgQR = findViewById(R.id.imagen_qr);
-        TextView nombreQR = findViewById(R.id.txtNombreQr);
-        TextView IdQR = findViewById(R.id.txtIdQr);
+        nombreQR = findViewById(R.id.txtNombreQr);
+        IdQR = findViewById(R.id.txtIdQr);
         Button btnVolver = findViewById(R.id.btn_volver);
 
-        Intent intent = getIntent();
-        int idPerfil = intent.getIntExtra("idPerfil", 0);
-        String nombreApellidos = intent.getStringExtra("nombreApellidos");
-
-        nombreQR.setText(nombreApellidos);
-        IdQR.setText(String.valueOf(idPerfil));
-
-        try {
-            BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
-            Bitmap bitmap = barcodeEncoder.encodeBitmap(String.valueOf(idPerfil), BarcodeFormat.QR_CODE,720,720);
-
-            imgQR.setImageBitmap(bitmap);
-        } catch (WriterException e) {
-            e.printStackTrace();
-        }
+        new IntentIntegrator(this).initiateScan();
 
         btnVolver.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,4 +43,13 @@ public class QrActivity extends AppCompatActivity {
         });
 
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data){
+        super.onActivityResult(requestCode,resultCode,data);
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode,resultCode,data);
+        String datos = result.getContents();
+        IdQR.setText(datos);
+    }
+
 }

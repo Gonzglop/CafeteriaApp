@@ -23,31 +23,25 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.squareup.picasso.Picasso;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.ArrayList;
 
 public class InicioActivity extends AppCompatActivity {
 
     TextView txtSaludo , txtSaldo, txtISaldo;
-    Button btnCrearPerfil, btnRecargarMonedero;
+    Button btnCrearPerfil, btnLectorQR;
     ImageView imagenCliente;
 
-    String idCliente;
+    String idCafeteria;
     RequestQueue requestQueue;
 
     RecyclerView recyclerView;
 
-    private static final String urlConsultarCliente = "https://micafeteriaapp.000webhostapp.com/android_mysql/consultar_cliente.php?id_cliente=";
-    private static final String urlConsultarPerfil = "https://micafeteriaapp.000webhostapp.com/android_mysql/consultar_perfil.php?id_cliente=";
-
+    private static final String urlConsultarCliente = "https://micafeteriaapp.000webhostapp.com/android_mysql/consultar_cafeteria.php?id_cafeteria=";
 
     ActivityResultLauncher resultLauncher;
 
@@ -62,43 +56,34 @@ public class InicioActivity extends AppCompatActivity {
 
         imagenCliente = (ImageView) findViewById(R.id.imagen_cliente_inicio);
         btnCrearPerfil = (Button) findViewById(R.id.btn_crear_perfil);
-        btnRecargarMonedero = (Button) findViewById(R.id.btn_recargar_monedero);
+        btnLectorQR = (Button) findViewById(R.id.btn_lector_qr);
         recyclerView = findViewById(R.id.recycler_perfiles);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         requestQueue = Volley.newRequestQueue(this);
 
         SharedPreferences preferences = getSharedPreferences("preferenciasLogin", Context.MODE_PRIVATE);
-        idCliente = preferences.getString("idCliente", "");
+        idCafeteria = preferences.getString("idCafeteria", "");
 
         consultarUsuario();
-        consultarPerfiles();
 
         btnCrearPerfil.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), RegistroPerfilActivity.class);
                 startActivity(intent);
-                //finish();
             }
         });
-        btnRecargarMonedero.setOnClickListener(new View.OnClickListener() {
+        btnLectorQR.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), MonederoActivity.class);
+                Intent intent = new Intent(getApplicationContext(), QrActivity.class);
                 startActivity(intent);
                 finish();
             }
         });
     }
 
-    /*
-    @Override
-    protected void onStart() {
-        super.onStart();
-        consultarUsuario();
-    }
-     */
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
@@ -128,7 +113,7 @@ public class InicioActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), MonederoActivity.class);
                 intent.putExtra("iSaldo","hola");
                 System.out.println(txtISaldo.getText());
-                intent.putExtra("idCliente",idCliente);
+                intent.putExtra("idCafeteria",idCafeteria);
                 startActivity(intent);
                 //finish();
                 return true;
@@ -170,7 +155,7 @@ public class InicioActivity extends AppCompatActivity {
     }
 
     private void consultarUsuario() {
-        String URL = urlConsultarCliente + idCliente;
+        String URL = urlConsultarCliente + idCafeteria;
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.GET,
                 URL,
@@ -180,21 +165,10 @@ public class InicioActivity extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
                         String dni,  nombre,  apellidos,  direccion,  telefono,  email,  password,  imagen, saldo;
                         try {
-                            dni = response.getString("dni_cliente");
-                            nombre = response.getString("nombre_cliente");
-                            apellidos = response.getString("apellidos_cliente");
-                            direccion = response.getString("direccion_cliente");
-                            telefono = response.getString("telefono_cliente");
-                            email = response.getString("email_cliente");
-                            password = response.getString("password_cliente");
-                            imagen = response.getString("imagen_cliente");
-                            saldo = response.getString("monedero_cliente");
+                            nombre = response.getString("nombre_cafeteria");
+                            imagen = response.getString("logo_cafeteria");
 
-                            txtSaludo.setText("¡Hola " + nombre + "!");
-                            txtSaldo.setText("Su saldo actual es de : " + saldo + "€");
-
-                            txtISaldo.setText(saldo);
-
+                            txtSaludo.setText(nombre);
 
                             try {
                                 Picasso.get().load(imagen)
@@ -219,49 +193,5 @@ public class InicioActivity extends AppCompatActivity {
         requestQueue.add(jsonObjectRequest);
     }
 
-    private void consultarPerfiles() {
-        String URL = urlConsultarPerfil + idCliente;
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
-                Request.Method.GET,
-                URL,
-                null,
-                new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        try {
-                            ArrayList<Perfil> listaPerfiles = new ArrayList<>();
-
-                            for (int i = 0; i < response.length(); i++) {
-                                JSONObject joPerfil = response.getJSONObject(i);
-                                int idPerfil = joPerfil.getInt("id_perfil");
-                                int idCliente = joPerfil.getInt("id_cliente");
-                                String nieDni = joPerfil.getString("nie_dni_perfil");
-                                String nombre = joPerfil.getString("nombre_perfil");
-                                String apellidos = joPerfil.getString("apellidos_perfil");
-                                String imagen = joPerfil.getString("imagen_perfil");
-                                int idCafeteria = joPerfil.getInt("id_cafeteria");
-                                String nombreCafeteria = joPerfil.getString("nombre_cafeteria");
-                                Perfil perfil = new Perfil(idPerfil, idCliente, nieDni, nombre, apellidos, imagen, idCafeteria, nombreCafeteria);
-                                listaPerfiles.add(perfil);
-                            }
-
-                            PerfilAdapter adapter = new PerfilAdapter(InicioActivity.this,listaPerfiles);
-                            recyclerView.setAdapter(adapter);
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(InicioActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
-                        System.out.println(error);
-                    }
-                }
-        );
-        requestQueue.add(jsonArrayRequest);
-    }
 
 }
