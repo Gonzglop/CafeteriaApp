@@ -23,12 +23,16 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 public class InicioActivity extends AppCompatActivity {
 
@@ -41,7 +45,8 @@ public class InicioActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
 
-    private static final String urlConsultarCliente = "https://micafeteriaapp.000webhostapp.com/android_mysql/consultar_cafeteria.php?id_cafeteria=";
+    private static final String urlConsultarCafeteria = "https://micafeteriaapp.000webhostapp.com/android_mysql/consultar_cafeteria.php?id_cafeteria=";
+    private static final String urlConsultarPedidos = "https://micafeteriaapp.000webhostapp.com/android_mysql/consultar_pedidos.php?";
 
     ActivityResultLauncher resultLauncher;
 
@@ -57,7 +62,7 @@ public class InicioActivity extends AppCompatActivity {
         imagenCliente = (ImageView) findViewById(R.id.imagen_cliente_inicio);
         btnCrearPerfil = (Button) findViewById(R.id.btn_crear_perfil);
         btnLectorQR = (Button) findViewById(R.id.btn_lector_qr);
-        recyclerView = findViewById(R.id.recycler_perfiles);
+        recyclerView = findViewById(R.id.recycler_pedidos);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         requestQueue = Volley.newRequestQueue(this);
@@ -65,7 +70,8 @@ public class InicioActivity extends AppCompatActivity {
         SharedPreferences preferences = getSharedPreferences("preferenciasLogin", Context.MODE_PRIVATE);
         idCafeteria = preferences.getString("idCafeteria", "");
 
-        consultarUsuario();
+        consultarCafeteria();
+        consultarPedidos();
 
         btnCrearPerfil.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -154,8 +160,8 @@ public class InicioActivity extends AppCompatActivity {
         }
     }
 
-    private void consultarUsuario() {
-        String URL = urlConsultarCliente + idCafeteria;
+    private void consultarCafeteria() {
+        String URL = urlConsultarCafeteria + idCafeteria;
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.GET,
                 URL,
@@ -192,6 +198,57 @@ public class InicioActivity extends AppCompatActivity {
         );
         requestQueue.add(jsonObjectRequest);
     }
+
+
+    private void consultarPedidos() {
+        String URL = urlConsultarPedidos;
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
+                Request.Method.GET,
+                URL,
+                null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        try {
+                            ArrayList<Pedido> listaPedidos = new ArrayList<>();
+                            for (int i = 0; i < response.length(); i++) {
+                                JSONObject pedido = response.getJSONObject(i);
+                                int idPedido = pedido.getInt("id_pedido");
+                                String fechaPedido = pedido.getString("fecha_pedido");
+                                JSONArray detalles = pedido.getJSONArray("detalles");
+                                StringBuilder detallesPedido = new StringBuilder();
+                                for (int j = 0; j < detalles.length(); j++) {
+                                    JSONObject detalle = detalles.getJSONObject(j);
+                                    String tipoProducto = detalle.getString("tipo_producto");
+                                    String nombreProducto = detalle.getString("nombre_producto");
+                                    String cantidad = detalle.getString("cantidad");
+                                    detallesPedido.append(tipoProducto).append(" - ")
+                                            .append(nombreProducto).append("\t\tx")
+                                            .append(cantidad).append("\n");
+                                }
+                                Pedido pedidoObjeto = new Pedido(idPedido, fechaPedido, detallesPedido.toString());
+                                listaPedidos.add(pedidoObjeto);
+                            }
+
+                            PedidoAdapter adapter = new PedidoAdapter(InicioActivity.this, listaPedidos);
+                            recyclerView.setAdapter(adapter);
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(InicioActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
+                        System.out.println(error);
+                    }
+                }
+        );
+        requestQueue.add(jsonArrayRequest);
+    }
+
 
 
 }

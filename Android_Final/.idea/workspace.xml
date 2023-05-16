@@ -10,16 +10,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1e1ca0ee-939e-493f-b534-292386c4618b" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/../Android_Pro/app/src/main/java/com/example/android_pro/Pedido.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Android_Pro/app/src/main/java/com/example/android_pro/QrActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Android_Pro/app/src/main/java/com/example/android_pro/QrActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Android_Pro/app/src/main/res/layout/activity_qr.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Android_Pro/app/src/main/res/layout/activity_qr.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Android_Pro/app/src/main/java/com/example/android_pro/InicioActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Android_Pro/app/src/main/java/com/example/android_pro/InicioActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Android_Pro/app/src/main/res/layout/inicio.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Android_Pro/app/src/main/res/layout/inicio.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[9c282ca8]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[/Users/gonzalolopez/.android/avd/Pixel_3a_API_33_arm64-v8a.avd]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
