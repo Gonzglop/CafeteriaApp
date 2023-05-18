@@ -53,7 +53,7 @@ public class RegistroPerfilActivity extends AppCompatActivity {
 
 
 
-    private static final String urlConsultarCafeterias = "https://micafeteriaapp.000webhostapp.com/android_mysql/consultar_cafeteria.php";
+    private static final String urlConsultarCafeterias = "https://micafeteriaapp.000webhostapp.com/android_mysql/consultar_cafeterias.php";
     private static final String urlInsertarPerfil = "https://micafeteriaapp.000webhostapp.com/android_mysql/insertar_perfil.php";
 
     @Override
