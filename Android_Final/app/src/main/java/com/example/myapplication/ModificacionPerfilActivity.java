@@ -52,7 +52,7 @@ public class ModificacionPerfilActivity extends AppCompatActivity {
     RequestQueue requestQueue;
 
     private static final String urlModificarPefil = "https://micafeteriaapp.000webhostapp.com/android_mysql/modificar_perfil.php";
-    private static final String urlConsultarCafeterias = "https://micafeteriaapp.000webhostapp.com/android_mysql/consultar_cafeteria.php";
+    private static final String urlConsultarCafeterias = "https://micafeteriaapp.000webhostapp.com/android_mysql/consultar_cafeterias.php";
 
 
     int idPerfil ;
