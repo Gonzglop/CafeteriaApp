@@ -92,13 +92,6 @@ public class InicioActivity extends AppCompatActivity {
         });
     }
 
-    /*
-    @Override
-    protected void onStart() {
-        super.onStart();
-        consultarUsuario();
-    }
-     */
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
@@ -122,6 +115,7 @@ public class InicioActivity extends AppCompatActivity {
             case R.id.Mn1:
                 Intent actInicio = new Intent(InicioActivity.this,ModificacionClienteActivity.class);
                 startActivity(actInicio);
+                finish();
                 return true;
 
             case R.id.Mn2:
@@ -130,7 +124,7 @@ public class InicioActivity extends AppCompatActivity {
                 System.out.println(txtISaldo.getText());
                 intent.putExtra("idCliente",idCliente);
                 startActivity(intent);
-                //finish();
+                finish();
                 return true;
 
             case R.id.Mn3:
@@ -256,8 +250,7 @@ public class InicioActivity extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(InicioActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
-                        System.out.println(error);
+                        //Toast.makeText(InicioActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
                     }
                 }
         );

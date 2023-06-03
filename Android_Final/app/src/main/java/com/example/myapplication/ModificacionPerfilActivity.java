@@ -101,16 +101,19 @@ public class ModificacionPerfilActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                //drawable = ModificacionPerfilActivity.this.ivImagenPerfil.getDrawable();
-                //bitmap = ((BitmapDrawable) drawable).getBitmap();
+                drawable = ivImagenPerfil.getDrawable();
+                bitmap = ((BitmapDrawable) drawable).getBitmap();
 
                 String dni = edtNieDniPerfil.getText().toString().trim();
                 String nombre = edtNombrePerfil.getText().toString().trim();
                 String apellidos = edtApellidosPerfil.getText().toString().trim();
                 String imagen = getStringImagen(bitmap);
 
-                ModificarPerfil(dni, nombre, apellidos, imagen);
-
+                if (!dni.isEmpty() && !nombre.isEmpty()&& !apellidos.isEmpty()) {
+                    ModificarPerfil(dni, nombre, apellidos, imagen);
+                } else {
+                    Toast.makeText(ModificacionPerfilActivity.this, "Faltan campos obligatorios por rellenar: (*)", Toast.LENGTH_SHORT).show();
+                }
             }
         });
         btnElegirImagen.setOnClickListener(new View.OnClickListener() {

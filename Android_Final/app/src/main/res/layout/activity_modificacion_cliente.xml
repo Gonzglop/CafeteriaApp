@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/white"
-        android:text="DNI:" />
+        android:text="* DNI:" />
 
     <EditText
         android:id="@+id/dni_cliente"
@@ -25,7 +25,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/white"
-        android:text="Nombre:" />
+        android:text="* Nombre:" />
 
     <EditText
         android:id="@+id/nombre_cliente"
@@ -40,7 +40,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/white"
-        android:text="Apellidos:"
+        android:text="* Apellidos:"
         />
 
     <EditText
@@ -86,7 +86,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/white"
-        android:text="Email:" />
+        android:text="* Email:" />
 
     <EditText
         android:id="@+id/email_cliente"
@@ -101,7 +101,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/white"
-        android:text="Contraseña:" />
+        android:text="* Contraseña:" />
 
     <EditText
         android:id="@+id/password_cliente"
@@ -141,16 +141,21 @@
 
         <Button
             android:id="@+id/btn_eliminar_cliente"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Eliminar usuario" />
+            android:layout_weight="1"
+            android:layout_marginRight="10dp"
+            android:text="Eliminar"
+            android:backgroundTint="@color/cardview_dark_background"/>
 
         <Button
             android:id="@+id/btn_modificar_cliente"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="0dp"
-            android:text="Modificar usuario" />
+            android:layout_weight="1"
+            android:layout_marginLeft="10dp"
+            android:backgroundTint="#FE4517"
+            android:text="Modificar" />
 
     </LinearLayout>
 

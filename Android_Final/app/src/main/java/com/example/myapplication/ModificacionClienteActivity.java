@@ -86,8 +86,8 @@ public class ModificacionClienteActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                //drawable = imagenCliente.getDrawable();
-                //bitmap = ((BitmapDrawable) drawable).getBitmap();
+                drawable = imagenCliente.getDrawable();
+                bitmap = ((BitmapDrawable) drawable).getBitmap();
 
                 String dni = edtDni.getText().toString().trim();
                 String nombre = edtNombre.getText().toString().trim();
@@ -98,7 +98,11 @@ public class ModificacionClienteActivity extends AppCompatActivity {
                 String password = edtPassword.getText().toString().trim();
                 String imagen = getStringImagen(bitmap);
 
-                ModificarUsuario(dni, nombre, apellidos, direccion, telefono, email, password, imagen);
+                if (!dni.isEmpty() && !email.isEmpty()&& !password.isEmpty()&& !nombre.isEmpty()&& !apellidos.isEmpty()) {
+                    ModificarUsuario(dni, nombre, apellidos, direccion, telefono, email, password, imagen);
+                } else {
+                    Toast.makeText(ModificacionClienteActivity.this, "Faltan campos obligatorios por rellenar: (*)", Toast.LENGTH_SHORT).show();
+                }
 
             }
         });

@@ -30,16 +30,20 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class PedidoUnicoActivity extends AppCompatActivity {
@@ -51,19 +55,19 @@ public class PedidoUnicoActivity extends AppCompatActivity {
     Button btnRealizarPedido, btnFecha, btnHora;
     TextView txtPregunta, txtProgramaSemana, txtEligeFechaHora, txtProductosSeleccionados, txtTotal;
 
-    String idCafeteria, idPerfil, horaDB, fechaDB;
+    String idCafeteria, idPerfil, idCliente, horaDB, fechaDB,dineroMonedero;
     int dia, mes, ano, hora, minutos;
     int numProductosSeleccionados;
-    double precioTotal;
+    double precioTotal , monedero;
     ArrayList<Producto> listaProductosSeleccionados = new ArrayList<>();
     ArrayList<DetallePedido> listaDetallesPedidos = new ArrayList<>();
 
     RequestQueue requestQueue;
     ProductoAdapter adapter;
+
     BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            // Aquí manejas los datos recibidos
             numProductosSeleccionados = intent.getIntExtra("numProductosSeleccionados",0);
             precioTotal = intent.getDoubleExtra("precioTotal",0);
             listaDetallesPedidos = intent.getParcelableArrayListExtra("listaDetallesPedidos");
@@ -76,6 +80,8 @@ public class PedidoUnicoActivity extends AppCompatActivity {
     private static final String urlConsultarProductos = "https://micafeteriaapp.000webhostapp.com/android_mysql/consultar_producto.php?id_cafeteria=";
     private static final String urlInsertarPedido = "https://micafeteriaapp.000webhostapp.com/android_mysql/insertar_pedido.php";
     private static final String urlInsertarDetallePedido = "https://micafeteriaapp.000webhostapp.com/android_mysql/insertar_detalle_pedido.php";
+    private static final String urlModificarMonederoCliente = "https://micafeteriaapp.000webhostapp.com/android_mysql/modificar_cliente_monedero.php";
+    private static final String urlConsultarCliente = "https://micafeteriaapp.000webhostapp.com/android_mysql/consultar_cliente.php?id_cliente=";
 
     @Override
     protected void onResume() {
@@ -90,12 +96,14 @@ public class PedidoUnicoActivity extends AppCompatActivity {
 
         Intent intentDatosPerfil = getIntent();
         int idPerfilIntent = intentDatosPerfil.getIntExtra("idPerfil", 0);
+        int idClienteIntent = intentDatosPerfil.getIntExtra("idCliente", 0);
         int idCafeteriaIntent = intentDatosPerfil.getIntExtra("idCafeteria", 0);
         String nombrePerfilIntent = intentDatosPerfil.getStringExtra("nombrePerfil");
 
-
         idCafeteria = String.valueOf(idCafeteriaIntent);
         idPerfil = String.valueOf(idPerfilIntent);
+        idCliente = String.valueOf(idClienteIntent);
+
 
         datePicker = findViewById(R.id.datePicker);
         spinnerOpciones = findViewById(R.id.spinner_tipo_productos);
@@ -115,18 +123,32 @@ public class PedidoUnicoActivity extends AppCompatActivity {
         txtProductosSeleccionados.setText("Productos seleccionados: "+ numProductosSeleccionados);
         txtTotal.setText("Total: "+ precioTotal + " €");
 
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_YEAR, 1); // Suma 1 día
+
+// Establece la fecha en el formato deseado
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+        String fechaPredef = dateFormat.format(calendar.getTime());
+        edtFecha.setText(fechaPredef);
+
+// Establece la hora en el formato deseado
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
+        String horaPredef = "11:15";
+        edtHora.setText(horaPredef);
+
         recyclerViewProductos.setLayoutManager(new LinearLayoutManager(this));
 
         requestQueue = Volley.newRequestQueue(this);
 
         consultarProductos();
-
+        consultarUsuario();
 
         btnFecha.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 final Calendar c = Calendar.getInstance();
+                c.add(Calendar.DAY_OF_YEAR, 1); // Suma 1 día
+
                 dia = c.get(Calendar.DAY_OF_MONTH);
                 mes = c.get(Calendar.MONTH);
                 ano = c.get(Calendar.YEAR);
@@ -139,7 +161,10 @@ public class PedidoUnicoActivity extends AppCompatActivity {
                         edtFecha.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
                     }
                 }
-                        , dia, mes, ano);
+                        , ano, mes, dia); // Establece la fecha por defecto
+
+                datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000); // Evita seleccionar fechas anteriores a la actual
+
                 datePickerDialog.show();
             }
         });
@@ -148,6 +173,9 @@ public class PedidoUnicoActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 final Calendar c = Calendar.getInstance();
+                c.set(Calendar.HOUR_OF_DAY, 11);
+                c.set(Calendar.MINUTE, 15);
+
                 hora = c.get(Calendar.HOUR_OF_DAY);
                 minutos = c.get(Calendar.MINUTE);
 
@@ -158,10 +186,12 @@ public class PedidoUnicoActivity extends AppCompatActivity {
                         edtHora.setText(hourOfDay + ":" + minute);
                     }
                 }
-                        , hora, minutos,false);
+                        , hora, minutos, false); // Establece la hora por defecto
+
                 timePickerDialog.show();
             }
         });
+
 
         btnRealizarPedido.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -255,10 +285,19 @@ public class PedidoUnicoActivity extends AppCompatActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Toast.makeText(PedidoUnicoActivity.this, "Pedido creado correctamente", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(getApplicationContext(), InicioActivity.class);
-                        startActivity(intent);
-                        finish();
+
+                        if ((monedero-precioTotal)>=0){
+                            dineroMonedero = String.valueOf(monedero - precioTotal);
+                            ModificarMonedero();
+
+                            Toast.makeText(PedidoUnicoActivity.this, "Pedido creado correctamente", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(getApplicationContext(), InicioActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }else{
+                            Toast.makeText(PedidoUnicoActivity.this, "No tienes suficiente dinero...", Toast.LENGTH_SHORT).show();
+                        }
+
                     }
                 },
                 new Response.ErrorListener() {
@@ -290,7 +329,6 @@ public class PedidoUnicoActivity extends AppCompatActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Toast.makeText(PedidoUnicoActivity.this, "Detalle del pedido creado correctamente", Toast.LENGTH_SHORT).show();
                     }
                 },
                 new Response.ErrorListener() {
@@ -313,6 +351,65 @@ public class PedidoUnicoActivity extends AppCompatActivity {
         requestQueue.add(stringRequest);
     }
 
+    private void ModificarMonedero() {
+        StringRequest stringRequest = new StringRequest(
+                Request.Method.POST,
+                urlModificarMonederoCliente,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        //Toast.makeText(PedidoUnicoActivity.this, "Transacción realizada correctamente", Toast.LENGTH_SHORT).show();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                        Toast.makeText(PedidoUnicoActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+        ){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String,String> params = new HashMap<>();
+                params.put("id_cliente", idCliente);
+                params.put("monedero_cliente", dineroMonedero);
+
+                return params;
+            }
+        };
+        requestQueue.add(stringRequest);
+    }
+
+    private void consultarUsuario() {
+        String URL = urlConsultarCliente + idCliente;
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.GET,
+                URL,
+                null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        String saldo;
+                        try {
+                            saldo = response.getString("monedero_cliente");
+                            monedero = Double.parseDouble(saldo);
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(PedidoUnicoActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
+        requestQueue.add(jsonObjectRequest);
+    }
+
 
     private ArrayList<Producto> filtrarProductosPorTipo(ArrayList<Producto> listaProductos, String tipoSeleccionado) {
         ArrayList<Producto> listaProductosFiltrada = new ArrayList<>();
@@ -323,7 +420,5 @@ public class PedidoUnicoActivity extends AppCompatActivity {
         }
         return listaProductosFiltrada;
     }
-
-
 
 }

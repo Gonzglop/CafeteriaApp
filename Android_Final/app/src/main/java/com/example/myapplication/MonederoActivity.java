@@ -68,11 +68,6 @@ public class MonederoActivity extends AppCompatActivity {
         btnRecuperar = (Button) findViewById(R.id.btnRecuperar);
         recordarDatos = (CheckBox) findViewById(R.id.chkRecordarDatosPago);
 
-        //Intent intent = getIntent();
-        //idCliente = intent.getStringExtra("idCliente");
-        //String iSaldo = intent.getStringExtra("iSaldo");
-        //txtSaldo.setText("Su saldo actual es de : " + iSaldo + " €");
-
 
         List<String> metodosPagoList = new ArrayList<>();
         metodosPagoList.add("Tarjeta de crédito");
@@ -101,11 +96,7 @@ public class MonederoActivity extends AppCompatActivity {
 
                 String cantidadTotal = String.valueOf(cantidadSaldo + cantidadRecarga);
                 ModificarMonedero(cantidadTotal);
-                Toast.makeText(MonederoActivity.this, cantidadTotal, Toast.LENGTH_SHORT).show();
-
-                Intent intent = new Intent(getApplicationContext(), InicioActivity.class);
-                startActivity(intent);
-                finish();
+                //Toast.makeText(MonederoActivity.this, cantidadTotal, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -154,7 +145,7 @@ public class MonederoActivity extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
                         try {
                             saldo = response.getString("monedero_cliente");
-                            txtSaldo.setText("Su saldo actual es de : " + saldo + "€");
+                            txtSaldo.setText(saldo + "€");
 
                         } catch (JSONException e) {
                             e.printStackTrace();

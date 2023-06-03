@@ -75,7 +75,7 @@ public class PerfilAdapter extends RecyclerView.Adapter<PerfilAdapter.PerfilView
                 intent.putExtra("nombreApellidos", perfil.getNombrePerfil() + " " + perfil.getApellidosPerfil());
 
                 contexto.startActivity(intent);
-                //((Activity) contexto).finish();
+                ((Activity) contexto).finish();
             }
         });
 
@@ -86,6 +86,7 @@ public class PerfilAdapter extends RecyclerView.Adapter<PerfilAdapter.PerfilView
                 intentDatosPerfil.putExtra("idPerfil", perfil.getIdPerfil());
                 intentDatosPerfil.putExtra("idCafeteria", perfil.getIdCafeteria());
                 intentDatosPerfil.putExtra("nombrePerfil", perfil.getNombrePerfil());
+                intentDatosPerfil.putExtra("idCliente", perfil.getIdCliente());
 
                 contexto.startActivity(intentDatosPerfil);
                 //((Activity) contexto).finish();
@@ -114,7 +115,7 @@ public class PerfilAdapter extends RecyclerView.Adapter<PerfilAdapter.PerfilView
                                 intent.putExtra("imagenPerfil", perfil.getImagenPerfil());
 
                                 contexto.startActivity(intent);
-                                //((Activity)contexto).finish();
+                                ((Activity)contexto).finish();
                                 return true;
                             case R.id.MnEliminar:
                                 eliminarPerfil(perfil.getIdPerfil());

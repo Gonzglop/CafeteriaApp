@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -36,7 +38,6 @@ public class RegistroClienteActivity extends AppCompatActivity {
     final int PICK_IMAGE_REQUEST = 1;
 
     Bitmap bitmap;
-
     RequestQueue requestQueue;
 
     private static final String urlInsertarCliente = "https://micafeteriaapp.000webhostapp.com/android_mysql/insertar_cliente.php";
@@ -64,6 +65,7 @@ public class RegistroClienteActivity extends AppCompatActivity {
         btnInsertar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 String dni = edtDni.getText().toString().trim();
                 String nombre = edtNombre.getText().toString().trim();
                 String apellidos = edtApellidos.getText().toString().trim();
@@ -71,9 +73,16 @@ public class RegistroClienteActivity extends AppCompatActivity {
                 String telefono = edtTelefono.getText().toString().trim();
                 String email = edtEmail.getText().toString().trim();
                 String password = edtPassword.getText().toString().trim();
-                String imagen = getStringImagen(bitmap);
+                String imagen = "";
+                if (bitmap!=null){
+                    imagen = getStringImagen(bitmap);
+                }
 
-                crearUsuario(dni, nombre, apellidos, direccion, telefono, email, password, imagen);
+                if (!dni.isEmpty() && !email.isEmpty()&& !password.isEmpty()&& !nombre.isEmpty()&& !apellidos.isEmpty()) {
+                    crearUsuario(dni, nombre, apellidos, direccion, telefono, email, password, imagen);
+                } else {
+                    Toast.makeText(RegistroClienteActivity.this, "Faltan campos obligatorios por rellenar: (*)", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 

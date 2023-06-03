@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/white"
-        android:text="DNI:" />
+        android:text="* DNI:" />
 
     <EditText
         android:id="@+id/dni_cliente"
@@ -25,7 +25,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/white"
-        android:text="Nombre:" />
+        android:text="* Nombre:" />
 
     <EditText
         android:id="@+id/nombre_cliente"
@@ -40,7 +40,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/white"
-        android:text="Apellidos:"
+        android:text="* Apellidos:"
         />
 
     <EditText
@@ -86,7 +86,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/white"
-        android:text="Email:" />
+        android:text="* Email:" />
 
     <EditText
         android:id="@+id/email_cliente"
@@ -101,7 +101,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/white"
-        android:text="Contraseña:" />
+        android:text="* Contraseña:" />
 
     <EditText
         android:id="@+id/password_cliente"
@@ -140,6 +140,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="0dp"
+        android:backgroundTint="#FE4517"
         android:text="Crear usuario" />
 
 </LinearLayout>

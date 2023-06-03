@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
                     try {
                         JSONObject jsonObject = new JSONObject(response);
                         idCliente = jsonObject.getString("id_cliente");
-                        Toast.makeText(MainActivity.this, "ID: " + idCliente, Toast.LENGTH_LONG).show();
+                        //Toast.makeText(MainActivity.this, "ID: " + idCliente, Toast.LENGTH_LONG).show();
 
                         guardarPreferencias(); // Guardar el id_cliente en las preferencias
 

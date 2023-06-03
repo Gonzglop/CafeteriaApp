@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -51,8 +53,6 @@ public class RegistroPerfilActivity extends AppCompatActivity {
 
     RequestQueue requestQueue;
 
-
-
     private static final String urlConsultarCafeterias = "https://micafeteriaapp.000webhostapp.com/android_mysql/consultar_cafeterias.php";
     private static final String urlInsertarPerfil = "https://micafeteriaapp.000webhostapp.com/android_mysql/insertar_perfil.php";
 
@@ -84,12 +84,20 @@ public class RegistroPerfilActivity extends AppCompatActivity {
         btnInsertar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 String nieDni = edtNieDni.getText().toString().trim();
                 String nombre = edtNombre.getText().toString().trim();
                 String apellidos = edtApellidos.getText().toString().trim();
-                String imagen = getStringImagen(bitmap);
+                String imagen = "";
+                if (bitmap!=null){
+                    imagen = getStringImagen(bitmap);
+                }
 
-                crearPerfil(nieDni, nombre, apellidos, imagen);
+                if (!nieDni.isEmpty() && !nombre.isEmpty()&& !apellidos.isEmpty()) {
+                    crearPerfil(nieDni, nombre, apellidos, imagen);
+                } else {
+                    Toast.makeText(RegistroPerfilActivity.this, "Faltan campos obligatorios por rellenar: (*)", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 

@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/white"
-        android:text="NIE/DNI:" />
+        android:text="* NIE/DNI:" />
 
     <EditText
         android:id="@+id/nie_dni_perfil"
@@ -25,7 +25,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/white"
-        android:text="Nombre:" />
+        android:text="* Nombre:" />
 
     <EditText
         android:id="@+id/nombre_perfil"
@@ -40,7 +40,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/white"
-        android:text="Apellidos:"
+        android:text="* Apellidos:"
         />
 
     <EditText
@@ -64,6 +64,7 @@
         android:id="@+id/spinner_mod_cafeteria"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         />
 
 
@@ -72,6 +73,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/white"
+        android:layout_marginTop="20dp"
         android:text="Imagen:" />
 
 
@@ -80,13 +82,15 @@
         android:id="@+id/btnBuscar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:text="Elegir imagen"
         />
 
     <ImageView
         android:id="@+id/imagen_perfil"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="20dp"
         android:layout_gravity="center"
         />
 
@@ -95,8 +99,9 @@
         android:id="@+id/btn_modificar_perfil"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
-        android:text="Modificar Perfil" />
+        android:layout_marginTop="30dp"
+        android:text="Modificar Perfil"
+        android:backgroundTint="#FE4517"/>
 
 
 
