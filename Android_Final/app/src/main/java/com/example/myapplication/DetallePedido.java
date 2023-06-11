@@ -14,6 +14,9 @@ public class DetallePedido implements Parcelable {
         this.idProducto = idProducto;
     }
 
+    public DetallePedido() {
+    }
+
     protected DetallePedido(Parcel in) {
         idDetallePedido = in.readInt();
         cantidadDetallePedido = in.readInt();
@@ -76,5 +79,15 @@ public class DetallePedido implements Parcelable {
 
     public void setIdPedido(int idPedido) {
         this.idPedido = idPedido;
+    }
+
+    @Override
+    public String toString() {
+        return "DetallePedido{" +
+                "idDetallePedido=" + idDetallePedido +
+                ", cantidadDetallePedido=" + cantidadDetallePedido +
+                ", idProducto=" + idProducto +
+                ", idPedido=" + idPedido +
+                "}\n";
     }
 }

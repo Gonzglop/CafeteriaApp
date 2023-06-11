@@ -26,8 +26,6 @@ public class ProductoAdapter extends RecyclerView.Adapter<ProductoAdapter.ViewHo
     private ArrayList<Producto> listaProductos;
     private ArrayList<Producto> listaProductosMostrados;
     private ArrayList<DetallePedido> listaDetallesPedidos;
-    private int numProductosSeleccionados;
-    private double precioTotal;
 
     public ProductoAdapter(Context context, ArrayList<Producto> listaProductos) {
         this.context = context;
@@ -36,7 +34,6 @@ public class ProductoAdapter extends RecyclerView.Adapter<ProductoAdapter.ViewHo
         this.listaDetallesPedidos = new ArrayList<>();
 
     }
-
 
     @NonNull
     @Override
@@ -58,23 +55,26 @@ public class ProductoAdapter extends RecyclerView.Adapter<ProductoAdapter.ViewHo
                 holder.cantidadProducto.setEnabled(true);
                 holder.cantidadProducto.setText("1");
 
-                DetallePedido detallePedido = new DetallePedido(1, producto.getIdProducto());
-                listaDetallesPedidos.add(detallePedido);
+                //DetallePedido detallePedido = new DetallePedido(1, producto.getIdProducto());
+                //listaDetallesPedidos.add(detallePedido);
             } else {
                 holder.cantidadProducto.setText("0");
                 holder.cantidadProducto.setEnabled(false);
 
+                /*
                 for (DetallePedido detallePedido : listaDetallesPedidos) {
                     if (detallePedido.getIdProducto() == producto.getIdProducto()) {
                         listaDetallesPedidos.remove(detallePedido);
                         break;
                     }
                 }
+                 */
             }
         });
 
         holder.cantidadProducto.addTextChangedListener(new TextWatcher() {
-            int cantidad ;
+            int cantidad;
+            double precioParcial;
 
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -82,7 +82,7 @@ public class ProductoAdapter extends RecyclerView.Adapter<ProductoAdapter.ViewHo
                 String cantidadTexto = String.valueOf(holder.cantidadProducto.getText());
                 if (!cantidadTexto.isEmpty()) {
                     cantidad = Integer.parseInt(cantidadTexto);
-                }else{
+                } else {
                     cantidad = 0;
                 }
 
@@ -97,25 +97,34 @@ public class ProductoAdapter extends RecyclerView.Adapter<ProductoAdapter.ViewHo
             public void afterTextChanged(Editable editable) {
 
                 int nuevaCantidad;
+                String indicacionLista = "";
+                DetallePedido detallePedido = new DetallePedido();
+
                 String cantidadTexto = String.valueOf(holder.cantidadProducto.getText());
                 if (!cantidadTexto.isEmpty()) {
                     nuevaCantidad = Integer.parseInt(cantidadTexto);
 
                     if (cantidad != nuevaCantidad) {
-                            cantidad = nuevaCantidad - cantidad;
-                            numProductosSeleccionados += cantidad;
-                            precioTotal += cantidad * producto.getPrecio();
-                        if (nuevaCantidad == 0){
+                        cantidad = nuevaCantidad - cantidad;
+                        precioParcial = cantidad * producto.getPrecio();
+
+                        detallePedido.setCantidadDetallePedido(nuevaCantidad);
+                        detallePedido.setIdProducto(producto.getIdProducto());
+                        indicacionLista = "agregar";
+
+                        if (nuevaCantidad <= 0) {
                             holder.checkboxProducto.setChecked(false);
+                            indicacionLista = "eliminar";
                         }
                     }
                 }
 
                 Intent intent = new Intent("ProductosSeleccionados");
-                intent.putExtra("precioTotal", precioTotal);
-                intent.putExtra("numProductosSeleccionados", numProductosSeleccionados);
-                intent.putParcelableArrayListExtra("listaDetallesPedidos", (ArrayList<? extends Parcelable>) listaDetallesPedidos);
-
+                intent.putExtra("precioParcial", precioParcial);
+                intent.putExtra("cantidad", cantidad);
+                //intent.putParcelableArrayListExtra("listaDetallesPedidos", (ArrayList<? extends Parcelable>) listaDetallesPedidos);
+                intent.putExtra("detallePedido", detallePedido);
+                intent.putExtra("indicacionLista", indicacionLista);
                 LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
             }
         });

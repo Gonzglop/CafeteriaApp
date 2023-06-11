@@ -58,7 +58,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:inputType="date"/>
+            android:inputType="none"
+            android:cursorVisible="false"
+            android:focusable="false"/>
 
         <Button
             android:id="@+id/btnFecha"
@@ -71,7 +73,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:inputType="time"/>
+            android:inputType="none"
+            android:cursorVisible="false"
+            android:focusable="false"/>
 
         <Button
             android:id="@+id/btnHora"
@@ -107,10 +111,34 @@
 
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView_productos"
+        android:id="@+id/recyclerView_productos1"
         android:layout_width="match_parent"
-        android:layout_height="270dp"/>
+        android:layout_height="270dp"
+        android:visibility="visible"/>
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView_productos2"
+        android:layout_width="match_parent"
+        android:layout_height="270dp"
+        android:visibility="gone"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView_productos3"
+        android:layout_width="match_parent"
+        android:layout_height="270dp"
+        android:visibility="gone"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView_productos4"
+        android:layout_width="match_parent"
+        android:layout_height="270dp"
+        android:visibility="gone"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView_productos5"
+        android:layout_width="match_parent"
+        android:layout_height="270dp"
+        android:visibility="gone"/>
     <TextView
         android:id="@+id/txtProductosSeleccionados"
         android:layout_width="match_parent"

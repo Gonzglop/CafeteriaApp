@@ -91,12 +91,23 @@ public class MonederoActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                double cantidadSaldo = Double.parseDouble(saldo);
-                double cantidadRecarga = Double.parseDouble(String.valueOf(edtCantidad.getText()));
+                if (!edtCantidad.getText().toString().isEmpty()) {
+                    double cantidadSaldo = Double.parseDouble(saldo);
+                    double cantidadRecarga = Double.parseDouble(String.valueOf(edtCantidad.getText()));
 
-                String cantidadTotal = String.valueOf(cantidadSaldo + cantidadRecarga);
-                ModificarMonedero(cantidadTotal);
-                //Toast.makeText(MonederoActivity.this, cantidadTotal, Toast.LENGTH_SHORT).show();
+                    if (cantidadRecarga > 0){
+                        if (!edtCodigo.getText().toString().isEmpty() && !edtTarjeta.getText().toString().isEmpty() && !edtFechaValidez.getText().toString().isEmpty()){
+                            String cantidadTotal = String.valueOf(cantidadSaldo + cantidadRecarga);
+                            ModificarMonedero(cantidadTotal);
+                        }else{
+                            Toast.makeText(MonederoActivity.this, "Faltan datos de pago por introducir", Toast.LENGTH_SHORT).show();
+                        }
+                    }else {
+                        Toast.makeText(MonederoActivity.this, "La recarga debe ser superior a 0€", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(MonederoActivity.this, "Introduce la cifra a recargar", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }

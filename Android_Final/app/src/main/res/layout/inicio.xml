@@ -44,7 +44,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_perfiles"
         android:layout_width="match_parent"
-        android:layout_height="200dp"/>
+        android:layout_height="220dp"/>
 
     <Button
         android:id="@+id/btn_crear_perfil"

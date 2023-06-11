@@ -50,7 +50,7 @@ public class PedidoUnicoActivity extends AppCompatActivity {
 
     DatePicker datePicker;
     Spinner spinnerOpciones;
-    RecyclerView recyclerViewProductos;
+    RecyclerView recyclerViewProductos1, recyclerViewProductos2, recyclerViewProductos3, recyclerViewProductos4, recyclerViewProductos5;
     EditText edtFecha, edtHora;
     Button btnRealizarPedido, btnFecha, btnHora;
     TextView txtPregunta, txtProgramaSemana, txtEligeFechaHora, txtProductosSeleccionados, txtTotal;
@@ -65,23 +65,36 @@ public class PedidoUnicoActivity extends AppCompatActivity {
     RequestQueue requestQueue;
     ProductoAdapter adapter;
 
-    BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            numProductosSeleccionados = intent.getIntExtra("numProductosSeleccionados",0);
-            precioTotal = intent.getDoubleExtra("precioTotal",0);
-            listaDetallesPedidos = intent.getParcelableArrayListExtra("listaDetallesPedidos");
-
-            txtProductosSeleccionados.setText("Productos seleccionados: "+ numProductosSeleccionados);
-            txtTotal.setText("Total: "+ precioTotal + " €");
-        }
-    };
-
     private static final String urlConsultarProductos = "https://micafeteriaapp.000webhostapp.com/android_mysql/consultar_producto.php?id_cafeteria=";
     private static final String urlInsertarPedido = "https://micafeteriaapp.000webhostapp.com/android_mysql/insertar_pedido.php";
     private static final String urlInsertarDetallePedido = "https://micafeteriaapp.000webhostapp.com/android_mysql/insertar_detalle_pedido.php";
     private static final String urlModificarMonederoCliente = "https://micafeteriaapp.000webhostapp.com/android_mysql/modificar_cliente_monedero.php";
     private static final String urlConsultarCliente = "https://micafeteriaapp.000webhostapp.com/android_mysql/consultar_cliente.php?id_cliente=";
+
+    BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            numProductosSeleccionados += intent.getIntExtra("cantidad",0);
+            precioTotal += intent.getDoubleExtra("precioParcial",0);
+            DetallePedido detallePedido = intent.getParcelableExtra("detallePedido");
+            String indicacionLista = intent.getStringExtra("indicacionLista");
+
+            if (detallePedido!=null){
+                for (DetallePedido detPedido : listaDetallesPedidos) {
+                    if (detPedido.getIdProducto() == detallePedido.getIdProducto()) {
+                        listaDetallesPedidos.remove(detPedido);
+                        break;
+                    }
+                }
+                if (indicacionLista.equals("agregar")){
+                    listaDetallesPedidos.add(detallePedido);
+                }
+            }
+            //System.out.println(listaDetallesPedidos);
+            txtProductosSeleccionados.setText("Productos seleccionados: "+ numProductosSeleccionados);
+            txtTotal.setText("Total: "+ precioTotal + " €");
+        }
+    };
 
     @Override
     protected void onResume() {
@@ -104,10 +117,13 @@ public class PedidoUnicoActivity extends AppCompatActivity {
         idPerfil = String.valueOf(idPerfilIntent);
         idCliente = String.valueOf(idClienteIntent);
 
-
         datePicker = findViewById(R.id.datePicker);
         spinnerOpciones = findViewById(R.id.spinner_tipo_productos);
-        recyclerViewProductos = findViewById(R.id.recyclerView_productos);
+        recyclerViewProductos1 = findViewById(R.id.recyclerView_productos1);
+        recyclerViewProductos2 = findViewById(R.id.recyclerView_productos2);
+        recyclerViewProductos3 = findViewById(R.id.recyclerView_productos3);
+        recyclerViewProductos4 = findViewById(R.id.recyclerView_productos4);
+        recyclerViewProductos5 = findViewById(R.id.recyclerView_productos5);
         btnRealizarPedido = findViewById(R.id.btnRealizarPedido);
         edtFecha = findViewById(R.id.edtFecha);
         edtHora = findViewById(R.id.edtHora);
@@ -123,21 +139,28 @@ public class PedidoUnicoActivity extends AppCompatActivity {
         txtProductosSeleccionados.setText("Productos seleccionados: "+ numProductosSeleccionados);
         txtTotal.setText("Total: "+ precioTotal + " €");
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DAY_OF_YEAR, 1); // Suma 1 día
+        final Calendar c = Calendar.getInstance();
+        c.add(Calendar.DAY_OF_YEAR, 1); // Suma 1 día
+        int d = c.get(Calendar.DAY_OF_MONTH);
+        int m = c.get(Calendar.MONTH);
+        int y = c.get(Calendar.YEAR);
+        fechaDB = String.format("%04d-%02d-%02d", y, m + 1, d);
+        edtFecha.setText(d + "/" + (m + 1) + "/" + y);
 
-// Establece la fecha en el formato deseado
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-        String fechaPredef = dateFormat.format(calendar.getTime());
-        edtFecha.setText(fechaPredef);
+        final Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.HOUR_OF_DAY, 11);
+        cal.set(Calendar.MINUTE, 15);
+        int h = cal.get(Calendar.HOUR_OF_DAY);
+        int min = cal.get(Calendar.MINUTE);
+        horaDB = String.format("%02d:%02d:00", h, min);
+        edtHora.setText(h + ":" + min);
 
-// Establece la hora en el formato deseado
-        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
-        String horaPredef = "11:15";
-        edtHora.setText(horaPredef);
-
-        recyclerViewProductos.setLayoutManager(new LinearLayoutManager(this));
-
+        /*
+        recyclerViewProductos1.setLayoutManager(new LinearLayoutManager(this));
+        recyclerViewProductos2.setLayoutManager(new LinearLayoutManager(this));
+        recyclerViewProductos3.setLayoutManager(new LinearLayoutManager(this));
+        recyclerViewProductos4.setLayoutManager(new LinearLayoutManager(this));
+         */
         requestQueue = Volley.newRequestQueue(this);
 
         consultarProductos();
@@ -196,14 +219,22 @@ public class PedidoUnicoActivity extends AppCompatActivity {
         btnRealizarPedido.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                crearPedido();
-                for (DetallePedido detallePedido : listaDetallesPedidos) {
-                    crearDetallePedido(detallePedido);
+                if (numProductosSeleccionados > 0){
+                    crearPedido();
+
+                    for (DetallePedido detallePedido : listaDetallesPedidos) {
+                        crearDetallePedido(detallePedido);
+                    }
+                }else {
+                    Toast.makeText(PedidoUnicoActivity.this, "No hay productos seleccionados", Toast.LENGTH_SHORT).show();
                 }
             }
         });
     }
 
+
+    private ArrayList<RecyclerView> recyclerViews;
+    private int currentRecyclerViewIndex;
 
     private void consultarProductos() {
         String URL = urlConsultarProductos + idCafeteria;
@@ -238,9 +269,6 @@ public class PedidoUnicoActivity extends AppCompatActivity {
                                 }
                             }
 
-                            //adapter = new ProductoAdapter(PedidoUnicoActivity.this, listaProductos);
-                            //recyclerViewProductos.setAdapter(adapter);
-
                             ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(
                                     PedidoUnicoActivity.this, android.R.layout.simple_spinner_item, listaTipos
                             );
@@ -250,18 +278,68 @@ public class PedidoUnicoActivity extends AppCompatActivity {
                             spinnerOpciones.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                                 @Override
                                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                    // Ocultar todos los RecyclerViews
+                                    recyclerViewProductos1.setVisibility(View.GONE);
+                                    recyclerViewProductos2.setVisibility(View.GONE);
+                                    recyclerViewProductos3.setVisibility(View.GONE);
+                                    recyclerViewProductos4.setVisibility(View.GONE);
+                                    recyclerViewProductos5.setVisibility(View.GONE);
 
-                                    String tipoSeleccionado = (String) parent.getItemAtPosition(position);
-                                    ArrayList<Producto> listaProductosFiltrada = filtrarProductosPorTipo(listaProductos, tipoSeleccionado);
-                                    ProductoAdapter adapter = new ProductoAdapter(PedidoUnicoActivity.this, listaProductosFiltrada);
-                                    recyclerViewProductos.setAdapter(adapter);
-
+                                    // Mostrar el RecyclerView seleccionado si el índice es válido
+                                    if (position >= 0 && position < listaTipos.size()) {
+                                        switch (position) {
+                                            case 0:
+                                                recyclerViewProductos1.setVisibility(View.VISIBLE);
+                                                break;
+                                            case 1:
+                                                recyclerViewProductos2.setVisibility(View.VISIBLE);
+                                                break;
+                                            case 2:
+                                                recyclerViewProductos3.setVisibility(View.VISIBLE);
+                                                break;
+                                            case 3:
+                                                recyclerViewProductos4.setVisibility(View.VISIBLE);
+                                                break;
+                                            case 4:
+                                                recyclerViewProductos5.setVisibility(View.VISIBLE);
+                                                break;
+                                        }
+                                    }
                                 }
 
                                 @Override
                                 public void onNothingSelected(AdapterView<?> parent) {
                                 }
                             });
+
+                            // Obtener la lista de productos filtrada para cada tipo
+                            for (int i = 0; i < listaTipos.size(); i++) {
+                                String tipo = listaTipos.get(i);
+                                ArrayList<Producto> listaProductosFiltrada = filtrarProductosPorTipo(listaProductos, tipo);
+                                ProductoAdapter productoAdapter = new ProductoAdapter(PedidoUnicoActivity.this, listaProductosFiltrada);
+                                switch (i) {
+                                    case 0:
+                                        recyclerViewProductos1.setAdapter(productoAdapter);
+                                        recyclerViewProductos1.setLayoutManager(new LinearLayoutManager(PedidoUnicoActivity.this));
+                                        break;
+                                    case 1:
+                                        recyclerViewProductos2.setAdapter(productoAdapter);
+                                        recyclerViewProductos2.setLayoutManager(new LinearLayoutManager(PedidoUnicoActivity.this));
+                                        break;
+                                    case 2:
+                                        recyclerViewProductos3.setAdapter(productoAdapter);
+                                        recyclerViewProductos3.setLayoutManager(new LinearLayoutManager(PedidoUnicoActivity.this));
+                                        break;
+                                    case 3:
+                                        recyclerViewProductos4.setAdapter(productoAdapter);
+                                        recyclerViewProductos4.setLayoutManager(new LinearLayoutManager(PedidoUnicoActivity.this));
+                                        break;
+                                    case 4:
+                                        recyclerViewProductos5.setAdapter(productoAdapter);
+                                        recyclerViewProductos5.setLayoutManager(new LinearLayoutManager(PedidoUnicoActivity.this));
+                                        break;
+                                }
+                            }
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -411,14 +489,14 @@ public class PedidoUnicoActivity extends AppCompatActivity {
     }
 
 
-    private ArrayList<Producto> filtrarProductosPorTipo(ArrayList<Producto> listaProductos, String tipoSeleccionado) {
-        ArrayList<Producto> listaProductosFiltrada = new ArrayList<>();
+    private ArrayList<Producto> filtrarProductosPorTipo(ArrayList<Producto> listaProductos, String tipo) {
+        ArrayList<Producto> listaFiltrada = new ArrayList<>();
         for (Producto producto : listaProductos) {
-            if (producto.getTipo().equals(tipoSeleccionado)) {
-                listaProductosFiltrada.add(producto);
+            if (producto.getTipo().equals(tipo)) {
+                listaFiltrada.add(producto);
             }
         }
-        return listaProductosFiltrada;
+        return listaFiltrada;
     }
 
 }
